@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Background overlay */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.4);
+}
+
+/* Popup card */
+.contact-popup {
+    background: #ffffff;
+    width: 90%;
+    max-width: 400px;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    position: relative;
+    text-align: center;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Close icon */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #555;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.close:hover {
+    color: #2cc08c;
+}
+
+/* Title */
+h2 {
+    font-size: 1.8rem;
+    color: #2cc08c;
+    margin-bottom: 25px;
+}
+
+/* Contact info */
+.contact-info {
+    margin-bottom: 25px;
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.contact-info span {
+    font-weight: 600;
+}
+
+/* Go Back link */
+.go-back {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    background: #2cc08c;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.go-back:hover {
+    background: #239c70;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.95);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .contact-popup {
+        padding: 25px 15px;
+    }
+}

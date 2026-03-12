@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Background Gradient */
+body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #2cc08c, #7a99ff);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card */
+.signup-card {
+    background: #f3f3f3;
+    width: 90%;
+    max-width: 420px;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+/* Logo */
+.logo {
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+/* Title */
+h2 {
+    color: #2cc08c;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+/* Divider */
+.divider {
+    height: 1px;
+    background: #ddd;
+    margin-bottom: 25px;
+}
+
+/* Input Fields */
+.input-box {
+    width: 100%;
+    padding: 14px 15px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-box:focus {
+    border-color: #2cc08c;
+    box-shadow: 0 0 5px rgba(44,192,140,0.4);
+}
+
+/* Signup Button */
+.signup-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, #2cc08c, #7a99ff);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.signup-btn:hover {
+    background: #239c70;
+}
+
+/* Footer */
+.footer {
+    margin-top: 30px;
+    color: #ffffff;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .signup-card {
+        padding: 30px 20px;
+    }
+}

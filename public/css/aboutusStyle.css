@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #2cc08c, #7a99ff);
+    color: #fff;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.navbar .logo {
+    width: 180px;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 25px;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    color: #fffb00;
+}
+
+/* About Section */
+.about {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    margin-bottom: 40px;
+}
+
+.about h1 {
+    color: #fff;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+.about p {
+    color: #f1f1f1;
+    font-size: 1rem;
+}
+
+/* Contact Info Section */
+.contact {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 25px 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.contact h2 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.contact-info div {
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.contact-info span {
+    font-weight: 600;
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 20px;
+}
+
+.buttons a {
+    display: inline-block;
+    margin-right: 15px;
+    padding: 12px 25px;
+    background: linear-gradient(to right, #2cc08c, #7a99ff);
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.buttons a:hover {
+    background: #239c70;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 50px;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media(max-width: 768px){
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar a {
+        margin: 10px 0 0 0;
+    }
+
+    .buttons a {
+        margin-bottom: 10px;
+        display: block;
+    }
+}
