@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Income Summary - SBTPL</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/loggedin_success.css">
+
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <i class="fas fa-times close-sidebar" id="closeSidebar"></i>
+  <div class="sidebar-header">
+    <img src="img/logo1.png" alt="Company Logo">
+    <h2>SBTPL</h2>
+  </div>
+  <ul>
+    <li><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+    <li><i class="fas fa-chart-pie"></i> Overview</li>
+    <li><i class="fas fa-users"></i> Team</li>
+    <li><i class="fas fa-sitemap"></i> Genealogy</li>
+    <li><i class="fas fa-shopping-cart"></i> Sales</li>
+    <li><i class="fas fa-trophy"></i> Reward</li>
+    <li><i class="fas fa-file-alt"></i> Reports</li>
+    <li><i class="fas fa-rupee-sign"></i> Income</li>
+    <li><i class="fas fa-user-plus"></i> Add BP</li>
+    <li><i class="fas fa-map"></i> Plot Map</li>
+    <li><i class="fas fa-key"></i> E-PIN</li>
+    <li><i class="fas fa-sign-out-alt"></i> Logout</li>
+  </ul>
+</div>
+
+<!-- Main content -->
+<div class="main-content">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;">
+      <i class="fas fa-bars hamburger" id="hamburger"></i>
+      <h1>Income Summary</h1>
+    </div>
+    <div class="profile" id="userProfile">
+      <i class="fas fa-user"></i>
+      <div class="profile-dropdown" id="profileDropdown">
+        <button id="changeProfilePicBtn">Change Profile Picture</button>
+        <button id="addContactBtn">Add Contact</button>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </div>
+  <div class="search-box">
+    <input type="text" placeholder="Search... (For Date DD/MM/YYYY)">
+    <button><i class="fas fa-search"></i> SEARCH</button>
+  </div>
+</div>
+
+<script>
+const userProfile = document.getElementById('userProfile');
+const profileDropdown = document.getElementById('profileDropdown');
+const sidebar = document.getElementById('sidebar');
+const hamburger = document.getElementById('hamburger');
+const closeSidebar = document.getElementById('closeSidebar');
+
+// Profile dropdown
+userProfile.addEventListener('click', e => {
+  e.stopPropagation();
+  profileDropdown.classList.toggle('active');
+});
+document.addEventListener('click', e => {
+  if(!userProfile.contains(e.target)){
+    profileDropdown.classList.remove('active');
+  }
+});
+document.getElementById('changeProfilePicBtn').addEventListener('click',()=>{alert('Change Profile Pic clicked'); profileDropdown.classList.remove('active');});
+document.getElementById('addContactBtn').addEventListener('click',()=>{alert('Add Contact clicked'); profileDropdown.classList.remove('active');});
+document.getElementById('logoutBtn').addEventListener('click',()=>{alert('Logout clicked'); profileDropdown.classList.remove('active');});
+
+// Sidebar open
+hamburger.addEventListener('click', () => {
+  sidebar.classList.add('active');
+});
+
+// Sidebar close
+closeSidebar.addEventListener('click', () => {
+  sidebar.classList.remove('active');
+});
+</script>
+
+</body>
+</html>

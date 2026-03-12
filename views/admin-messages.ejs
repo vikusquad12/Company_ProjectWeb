@@ -1,0 +1,27 @@
+<h2>All Messages</h2>
+<% if(messages.length === 0){ %>
+    <p>No messages yet</p>
+<% } else { %>
+    <% messages.forEach(msg => { %>
+        <div style="border:1px solid #ddd; padding:10px; margin-bottom:10px;">
+            <strong><%= msg.title %></strong> - <%= msg.isBroadcast ? "Broadcast" : "User Message" %>
+            <p><%= msg.message %></p>
+        </div>
+    <% }) %>
+<% } %>
+
+<script>
+async function deleteMessage(id){
+    if(!confirm("Delete this message?")) return;
+
+    const res = await fetch("/admin/delete-message/"+id,{
+        method:"DELETE"
+    });
+
+    const data = await res.json();
+
+    if(data.success){
+        location.reload();
+    }
+}
+</script>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAV Admin Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="close-btn" onclick="toggleSidebar()">✖</div>
+    <div class="logo">IAV</div>
+    <ul>
+        <li>Dashboard</li>
+        <li>Overview</li>
+        <li>Team</li>
+        <li>Genealogy</li>
+        <li>Sales</li>
+        <li>Reward</li>
+        <li>Reports</li>
+        <li>Income</li>
+        <li>Add BP</li>
+        <li>E-PIN</li>
+        <li onclick="logout()">Logout</li>
+    </ul>
+</div>
+
+<!-- Main -->
+<div class="main" id="main">
+
+    <div class="topbar">
+        <div>
+            <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+            <span style="font-size:22px;font-weight:600;">Dashboard</span>
+        </div>
+
+        <!-- Profile -->
+        <div class="profile">
+             <div class="profile-wrapper" style="position: relative; display: flex; align-items: center; gap: 10px;font-size: 23px;">
+            <!-- Notification Icon -->
+            <div style="position: relative; cursor: pointer;" onclick="window.location.href='/user/notifications'">
+                🔔
+                <span id="notifCount" 
+                    style="position: absolute; top: -5px; right: -10px; background:red; color:white; border-radius:50%; 
+                            width:18px; height:18px; font-size:12px; display:none; text-align:center; line-height:18px;">
+                0</span>
+            </div>
+
+            <!-- Profile Picture -->
+            <img src="<%= user.profilePic || 'https://i.pravatar.cc/150?img=3' %>" id="profilePic" onclick="toggleDropdown()" style="cursor:pointer;">
+        </div>
+            <!-- <img src="<%= user.profilePic || 'https://i.pravatar.cc/150?img=3' %>" id="profilePic" onclick="toggleDropdown()"> -->
+
+            <div class="dropdown" id="dropdown">
+                <div style="padding:10px; border-bottom:1px solid #eee;">
+                    <strong><%= user.username %></strong><br>
+                    <small><%= user.email %></small><br>
+                    <small id="dropdownPhone">Phone: <%= user.updated_phone || user.phone %></small>
+                </div>
+                <button type="button" onclick="document.getElementById('profileUpload').click()">Change Picture</button>
+                <button type="button" onclick="updateMobile()">Update Mobile</button>
+                <button type="button" onclick="openModal('usernameModal')">Edit Username</button>
+                <button type="button" onclick="openModal('emailModal')">Edit Email</button>
+                <button type="button" onclick="openModal('passwordModal')">Change Password</button>
+                <button type="button" onclick="logout()">Logout</button>
+            </div>
+
+            <!-- Hidden Form -->
+            <form action="/upload-profile-pic" method="POST" enctype="multipart/form-data" id="profileForm" style="display:none;">
+                <input type="file" accept="image/*" name="profilePic" id="profileUpload">
+            </form>
+        
+        </div>
+    </div>
+
+    <!-- Date Filter -->
+    <div class="filter-box">
+        <input type="date" id="startDate">
+        <span>to</span>
+        <input type="date" id="endDate">
+        <button onclick="filterData()">Search</button>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+        <h2><%= user._id %></h2>
+        <h3><%= user.username %></h3>
+
+        <p>Contact No: 
+            <span id="mobileNumber">
+                <%= user.updated_phone || user.phone %>
+            </span>
+        </p>
+        <p>Email: <%= user.email %></p>
+        <p>Joined On: <%= new Date(user.createdAt).toDateString() %></p>
+        <p>Referral ID: <%= user.referralCode %></p>
+
+        <p>Status: 
+            <% if(user.isActive){ %>
+                <span style="color:green;">Active</span>
+            <% } else { %>
+                <span style="color:red;">Inactive</span>
+            <% } %>
+        </p>
+
+        <!-- Stage KYC Status -->
+         <!-- Stage KYC Status for logged-in user -->
+        <p>KYC Stage: 
+            <% if(user.stageKyc && user.stageKyc !== "") { %>
+                <% if(user.stageKyc === "Pending") { %>
+                    <span style="color:orange;"><%= user.stageKyc %></span>
+                <% } else if(user.stageKyc === "Under Review") { %>
+                    <span style="color:blue;"><%= user.stageKyc %></span>
+                <% } else if(user.stageKyc === "Verified") { %>
+                    <span style="color:green;"><%= user.stageKyc %></span>
+                <% } else if(user.stageKyc === "Rejected") { %>
+                    <span style="color:red;"><%= user.stageKyc %></span>
+                <% } else { %>
+                    <span><%= user.stageKyc %></span>
+                <% } %>
+            <% } else { %>
+                <span style="color:gray;">Not Available</span>
+            <% } %>
+        </p>
+
+        <hr style="margin:15px 0;">
+
+        <!-- 🪪 KYC SECTION -->
+        <div class="kyc-section">
+            <% if(user.kycDocument && user.kycDocument !== ""){ %>
+                <% if(user.kycDocument.endsWith(".pdf")) { %>
+                    <p style="color:green;">KYC Uploaded (PDF)</p>
+                    <a href="<%= user.kycDocument %>" target="_blank">📄 View Document</a>
+                <% } else { %>
+                    <p style="color:green;">KYC Uploaded (Image)</p>
+                    <img src="<%= user.kycDocument %>" alt="KYC Document">
+                <% } %>
+            <% } else { %>
+                <p style="color:red;">KYC Not Uploaded</p>
+            <% } %>
+
+            <!-- Upload KYC Form -->
+            <form id="kycForm" class="kyc-form" action="/upload-kyc" method="POST" enctype="multipart/form-data">
+                <input type="file" id="kycFileInput" name="kycDoc" accept="image/*,application/pdf" required>
+                <button type="submit">Upload / Update KYC</button>
+            </form>
+
+            <!-- Preview Section -->
+            <div id="kycPreview">
+                <img id="kycPreviewImage" class="preview-img" style="display:none;">
+                <a id="kycPdfLink" target="_blank" style="display:none;">📄 View PDF</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+        <div class="card">
+            <h4>Total Sales</h4>
+            <div class="value">₹ <span id="totalSales">0</span></div>
+            <div class="cancel">Cancelled: ₹ <span id="cancelSales">0</span></div>
+        </div>
+
+        <div class="card">
+            <h4>Self Total Income</h4>
+            <div class="value">₹ <span id="selfIncome">0</span></div>
+            <small>Payable Amt: ₹ <span id="payableAmt">0</span></small>
+        </div>
+
+        <div class="card">
+            <h4>Self Total TDS</h4>
+            <div class="value">₹ <span id="tds">0</span></div>
+        </div>
+
+        <div class="card">
+            <h4>Total Sale Point</h4>
+            <div class="value"><span id="salePoint">0</span></div>
+            <div class="cancel">Cancelled: <span id="cancelPoint">0</span></div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="section">
+        <h3>Sale</h3>
+        <canvas id="saleChart"></canvas>
+    </div>
+
+    <div class="section">
+        <h3>Self Income</h3>
+        <canvas id="incomeChart"></canvas>
+    </div>
+
+</div>
+
+<!-- Upload Overlay -->
+<div id="uploadOverlay" class="overlay">
+    <div class="popup">
+        <div class="loader" id="loader"></div>
+        <p id="popupMessage">Processing...</p>
+        <button id="popupOk" onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+<!-- USERNAME, EMAIL, PASSWORD MODALS (unchanged) -->
+<div class="modal" id="usernameModal">
+  <div class="modal-content">
+    <h3>Edit Username</h3>
+    <form action="/update-username" method="POST">
+      <input type="text" name="username" placeholder="New Username" required>
+      <button type="submit">Update</button>
+      <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="emailModal">
+  <div class="modal-content">
+    <h3>Edit Email</h3>
+    <form action="/update-email" method="POST">
+      <input type="email" name="email" placeholder="New Email" required>
+      <button type="submit">Update</button>
+      <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="passwordModal">
+  <div class="modal-content">
+    <h3>Change Password</h3>
+    <form action="/change-password" method="POST">
+      <input type="password" name="oldPassword" placeholder="Old Password" required>
+      <input type="password" name="newPassword" placeholder="New Password" required>
+      <button type="submit">Change</button>
+      <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ================= CLOSE SIDEBAR ON OUTSIDE CLICK (MOBILE) ================= */
+document.addEventListener("click", function(e) {
+    const sidebar = document.getElementById("sidebar");
+    const menuToggle = document.querySelector(".menu-toggle");
+
+    if (window.innerWidth <= 900) {
+        if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+            sidebar.classList.remove("show");
+        }
+    }
+});
+
+/* ================= CLOSE MODALS ON OUTSIDE CLICK ================= */
+document.querySelectorAll(".modal").forEach(modal => {
+    modal.addEventListener("click", function(e) {
+        if (e.target === modal) {
+            modal.classList.remove("active");
+        }
+    });
+});
+
+/* ================= SIDEBAR TOGGLE ================= */
+function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("show");
+    document.body.classList.toggle("sidebar-open");
+}
+
+/* ================= PROFILE DROPDOWN ================= */
+function toggleDropdown() {
+    document.getElementById("dropdown").classList.toggle("active");
+}
+
+/* ================= UPDATE MOBILE NUMBER ================= */
+async function updateMobile() {
+    let mobile = prompt("Enter new mobile number:", "<%= user.phone %>");
+    if (!mobile) return;
+
+    if (!/^[6-9]\d{9}$/.test(mobile)) {
+        alert("Enter valid 10 digit mobile number");
+        return;
+    }
+
+    try {
+        const response = await fetch("/update-mobile", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ phone: mobile })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            document.getElementById("mobileNumber").innerText = data.phone;
+            document.getElementById("dropdownPhone").innerText = "Phone: " + data.phone;
+            alert("Mobile number updated successfully!");
+        } else {
+            alert(data.message);
+        }
+    } catch {
+        alert("Update failed");
+    }
+}
+
+/* ================= MODAL CONTROLS ================= */
+function openModal(id) {
+    document.getElementById("dropdown").classList.remove("active");
+    document.getElementById(id).classList.add("active");
+}
+
+function closeModal() {
+    document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
+}
+
+/* ================= KYC PREVIEW ================= */
+const kycInput = document.getElementById('kycFileInput');
+const kycPreviewImg = document.getElementById('kycPreviewImage');
+const kycPdfLink = document.getElementById('kycPdfLink');
+
+kycInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            kycPreviewImg.src = e.target.result;
+            kycPreviewImg.style.display = 'block';
+            kycPdfLink.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    } else if (file.type === 'application/pdf') {
+        kycPdfLink.href = URL.createObjectURL(file);
+        kycPdfLink.style.display = 'inline-block';
+        kycPreviewImg.style.display = 'none';
+    } else {
+        kycPreviewImg.style.display = 'none';
+        kycPdfLink.style.display = 'none';
+    }
+});
+
+/* ================= LOGOUT ================= */
+function logout() {
+    alert("Logged out successfully!");
+    window.location.href = "/logout";
+}
+
+/* ================= UPLOAD POPUP LOGIC ================= */
+const profileForm = document.getElementById("profileForm");
+const profileFileInput = document.getElementById("profileUpload");
+const overlay = document.getElementById("uploadOverlay");
+const popupMessage = document.getElementById("popupMessage");
+const popupOk = document.getElementById("popupOk");
+const loader = document.getElementById("loader");
+let uploadFinished = false;
+
+profileFileInput.addEventListener("change", function() {
+    if (this.files.length > 0) {
+        uploadFinished = false;
+        overlay.classList.add("active");
+        popupMessage.innerText = "Processing...";
+        popupOk.style.display = "none";
+        loader.style.display = "block";
+        profileForm.submit();
+    }
+});
+
+/* ================= KYC UPLOAD LOADER ================= */
+const kycForm = document.getElementById("kycForm");
+
+if (kycForm) {
+    kycForm.addEventListener("submit", async function(e) {
+        e.preventDefault(); // prevent normal form submission
+        const formData = new FormData(kycForm);
+
+        // Show overlay & loader
+        overlay.classList.add("active");
+        popupMessage.innerText = "Uploading KYC...";
+        loader.style.display = "block";
+        popupOk.style.display = "none";
+
+        try {
+            const res = await fetch("/upload-kyc", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                popupMessage.innerText = "KYC Updated Successfully!";
+                uploadFinished = true;
+                loader.style.display = "none";
+                popupOk.style.display = "inline-block";
+
+                // Optional: update KYC preview immediately
+                if (data.kycUrl.endsWith(".pdf")) {
+                    document.getElementById('kycPreviewImage').style.display = "none";
+                    const pdfLink = document.getElementById('kycPdfLink');
+                    pdfLink.href = data.kycUrl;
+                    pdfLink.style.display = "inline-block";
+                } else {
+                    const img = document.getElementById('kycPreviewImage');
+                    img.src = data.kycUrl;
+                    img.style.display = "block";
+                    document.getElementById('kycPdfLink').style.display = "none";
+                }
+
+                // Reload the page automatically after 1.5 seconds
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+
+            } else {
+                popupMessage.innerText = data.message || "Upload failed";
+                loader.style.display = "none";
+                popupOk.style.display = "inline-block";
+            }
+        } catch (err) {
+            console.error(err);
+            popupMessage.innerText = "Upload failed. Try again.";
+            loader.style.display = "none";
+            popupOk.style.display = "inline-block";
+        }
+    });
+}
+
+// kyc stage by admin update
+async function updateStageKYC(userId, stage) {
+    if(!stage) return;
+    try {
+        const res = await fetch(`/admin/update-stage-kyc/${userId}`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ stageKyc: stage })
+        });
+        const data = await res.json();
+        if(data.success){
+            alert(`Stage KYC updated to "${stage}"`);
+        } else {
+            alert(data.message || "Failed to update Stage KYC");
+        }
+    } catch(err){
+        console.error(err);
+        alert("Error updating Stage KYC");
+    }
+}
+
+/* Close overlay popup */
+function closePopup() {
+    if (uploadFinished) {
+        overlay.classList.remove("active");
+        uploadFinished = false;
+    }
+}
+overlay.addEventListener("click", function(e) {
+    if (e.target === overlay && uploadFinished) closePopup();
+});
+
+
+
+
+/* ================= DASHBOARD DATA ================= */
+let salesData = [
+    { date: '2026-02-02', amount: 5000, cancelled: false },
+    { date: '2026-02-10', amount: 3000, cancelled: false },
+    { date: '2026-02-15', amount: 2000, cancelled: true },
+    { date: '2026-02-20', amount: 8000, cancelled: false }
+];
+
+function calculateDashboard(data) {
+    let total = 0, cancelled = 0;
+    data.forEach(s => s.cancelled ? cancelled += s.amount : total += s.amount);
+    let income = Math.round(total * 0.1);
+    let tds = Math.round(income * 0.05);
+    document.getElementById("totalSales").innerText = total;
+    document.getElementById("cancelSales").innerText = cancelled;
+    document.getElementById("selfIncome").innerText = income;
+    document.getElementById("tds").innerText = tds;
+    document.getElementById("payableAmt").innerText = income - tds;
+    document.getElementById("salePoint").innerText = total / 100;
+    document.getElementById("cancelPoint").innerText = cancelled / 100;
+}
+
+function filterData() {
+    let start = document.getElementById("startDate").value;
+    let end = document.getElementById("endDate").value;
+
+    if (!start || !end) {
+        alert("Select both dates");
+        return;
+    }
+
+    let startDate = new Date(start);
+    let endDate = new Date(end);
+
+    let filtered = salesData.filter(s => {
+        let saleDate = new Date(s.date);
+        return saleDate >= startDate && saleDate <= endDate;
+    });
+
+    calculateDashboard(filtered);
+}
+
+calculateDashboard(salesData);
+
+/* ================= CHARTS ================= */
+new Chart(document.getElementById("saleChart"), {
+    type: 'bar',
+    data: {
+        labels: ['Week1', 'Week2', 'Week3', 'Week4'],
+        datasets: [{ label: 'Sales', data: [5000, 3000, 2000, 8000], backgroundColor: '#1aa0c6' }]
+    }
+});
+
+new Chart(document.getElementById("incomeChart"), {
+    type: 'pie',
+    data: {
+        labels: ['Incentives', 'Reward Downpayment', 'Reward EMI'],
+        datasets: [{ data: [3000, 2000, 1000], backgroundColor: ['#63c7d9', '#1aa0c6', '#8cd17d'] }]
+    }
+});
+
+/* ================= NOTIFICATIONS ================= */
+let notifCount = 0; // initial value
+
+async function fetchNotifications() {
+    try {
+        const res = await fetch("/user/notifications/unread-count");
+        const data = await res.json();
+        const badge = document.getElementById("notifCount");
+        if (badge) {
+            badge.innerText = data.count || 0;
+            badge.style.display = data.count > 0 ? 'inline-block' : 'none';
+        }
+    } catch (err) {
+        console.error("Error fetching notifications:", err);
+    }
+}
+
+fetchNotifications();
+setInterval(fetchNotifications, 30000);
+
+function openNotifications() {
+    window.location.href = "/user/notifications";
+}
+</script>
+
+</body>
+</html>

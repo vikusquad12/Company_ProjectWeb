@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAV Admin Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="css/dashboard.css">
+
+
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="close-btn" onclick="toggleSidebar()">✖</div>
+    <div class="logo">IAV</div>
+    <ul>
+        <li>Dashboard</li>
+        <li>Overview</li>
+        <li>Team</li>
+        <li>Genealogy</li>
+        <li>Sales</li>
+        <li>Reward</li>
+        <li>Reports</li>
+        <li>Income</li>
+        <li>Add BP</li>
+        <li>E-PIN</li>
+        <li onclick="logout()">Logout</li>
+    </ul>
+</div>
+
+<!-- Main -->
+<div class="main" id="main">
+
+    <div class="topbar">
+        <div>
+            <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+            <span style="font-size:22px;font-weight:600;">Dashboard</span>
+        </div>
+
+        <!-- Profile -->
+        <div class="profile">
+            <img src="https://i.pravatar.cc/150?img=3" id="profilePic" onclick="toggleDropdown()">
+            <div class="dropdown" id="dropdown">
+                <button onclick="changePicture()">Change Picture</button>
+                <button onclick="updateMobile()">Update Mobile</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Filter -->
+    <div class="filter-box">
+        <input type="date" id="startDate">
+        <span>to</span>
+        <input type="date" id="endDate">
+        <button onclick="filterData()">Search</button>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+        <h2>S1296</h2>
+        <h3>BANDNA KUMARI</h3>
+        <p>Contact No: <span id="mobileNumber">9162908506</span></p>
+        <p>Email: admin@iav.com</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+        <div class="card">
+            <h4>Total Sales</h4>
+            <div class="value">₹ <span id="totalSales">0</span></div>
+            <div class="cancel">Cancelled: ₹ <span id="cancelSales">0</span></div>
+        </div>
+
+        <div class="card">
+            <h4>Self Total Income</h4>
+            <div class="value">₹ <span id="selfIncome">0</span></div>
+            <small>Payable Amt: ₹ <span id="payableAmt">0</span></small>
+        </div>
+
+        <div class="card">
+            <h4>Self Total TDS</h4>
+            <div class="value">₹ <span id="tds">0</span></div>
+        </div>
+
+        <div class="card">
+            <h4>Total Sale Point</h4>
+            <div class="value"><span id="salePoint">0</span></div>
+            <div class="cancel">Cancelled: <span id="cancelPoint">0</span></div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="section">
+        <h3>Sale</h3>
+        <canvas id="saleChart"></canvas>
+    </div>
+
+    <div class="section">
+        <h3>Self Income</h3>
+        <canvas id="incomeChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+
+/* Sidebar Toggle */
+function toggleSidebar(){
+    document.getElementById("sidebar").classList.toggle("show");
+}
+
+/* Profile Dropdown */
+function toggleDropdown(){
+    document.getElementById("dropdown").classList.toggle("active");
+}
+
+/* Change Profile Picture */
+function changePicture(){
+    let url = prompt("Enter Image URL:");
+    if(url){
+        document.getElementById("profilePic").src = url;
+    }
+}
+
+/* Update Mobile */
+function updateMobile(){
+    let mobile = prompt("Enter new mobile number:");
+    if(mobile){
+        document.getElementById("mobileNumber").innerText = mobile;
+        alert("Mobile number updated!");
+    }
+}
+
+/* Logout */
+function logout(){
+    alert("Logged out successfully!");
+    location.reload();
+}
+
+/* Dummy Data */
+let salesData = [
+    {date:'2026-02-02', amount:5000, cancelled:false},
+    {date:'2026-02-10', amount:3000, cancelled:false},
+    {date:'2026-02-15', amount:2000, cancelled:true},
+    {date:'2026-02-20', amount:8000, cancelled:false}
+];
+
+function calculateDashboard(data){
+    let total=0, cancelled=0;
+
+    data.forEach(s=>{
+        if(s.cancelled) cancelled+=s.amount;
+        else total+=s.amount;
+    });
+
+    let income=total*0.1;
+    let tds=income*0.05;
+
+    document.getElementById("totalSales").innerText=total;
+    document.getElementById("cancelSales").innerText=cancelled;
+    document.getElementById("selfIncome").innerText=income;
+    document.getElementById("tds").innerText=tds;
+    document.getElementById("payableAmt").innerText=income-tds;
+    document.getElementById("salePoint").innerText=total/100;
+    document.getElementById("cancelPoint").innerText=cancelled/100;
+}
+
+function filterData(){
+    let start=document.getElementById("startDate").value;
+    let end=document.getElementById("endDate").value;
+
+    if(!start||!end){
+        alert("Select both dates");
+        return;
+    }
+
+    let filtered=salesData.filter(s=>s.date>=start && s.date<=end);
+    calculateDashboard(filtered);
+}
+
+calculateDashboard(salesData);
+
+/* Charts */
+new Chart(document.getElementById("saleChart"),{
+    type:'bar',
+    data:{
+        labels:['Week1','Week2','Week3','Week4'],
+        datasets:[{
+            label:'Sales',
+            data:[5000,3000,2000,8000],
+            backgroundColor:'#1aa0c6'
+        }]
+    }
+});
+
+new Chart(document.getElementById("incomeChart"),{
+    type:'pie',
+    data:{
+        labels:['Incentives','Reward Downpayment','Reward EMI'],
+        datasets:[{
+            data:[3000,2000,1000],
+            backgroundColor:['#63c7d9','#1aa0c6','#8cd17d']
+        }]
+    }
+});
+
+</script>
+
+</body>
+</html>

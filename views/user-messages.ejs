@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Your Messages</h2>
+
+<% if(messages.length === 0){ %>
+    <p>No messages</p>
+<% } else { %>
+
+    <% messages.forEach(msg => { %>
+        <div style="border:1px solid #ddd; padding:15px; margin-bottom:10px;">
+            <h4><%= msg.title %></h4>
+            <p><%= msg.message %></p>
+            <small><%= new Date(msg.createdAt).toLocaleString() %></small>
+        </div>
+    <% }) %>
+
+<% } %>
+</body>
+</html>

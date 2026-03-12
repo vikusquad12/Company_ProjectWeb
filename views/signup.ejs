@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - North Vihar Infratech</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/signupStyle.css">
+
+</head>
+<body>
+
+<div class="signup-card">
+
+    <!-- Logo -->
+    <img src="img/logo1.png" alt="Company Logo" class="logo">
+
+    <h2>Sign Up</h2>
+
+    <div class="divider"></div>
+
+    <form method="post" action="/user-signup-submit">
+        <input type="text" name="username" placeholder="Enter User Name" class="input-box" required>
+        <input type="email" name="email" placeholder="Enter Email" class="input-box" required>
+        <input type="number" name="phone" placeholder="Enter Phone Number" class="input-box" required>
+        <input type="password" name="password" placeholder="Enter Password" class="input-box" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" class="input-box" required>
+
+        <button type="submit" class="signup-btn">Sign Up</button>
+    </form>
+
+    <div class="divider" style="margin-top:25px;"></div>
+
+    <div class="forgot">
+        Already have an account? <a href="/user-login">Login</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    © 2026 North Vihar Infratech Pvt Ltd
+</div>
+
+</body>
+</html>

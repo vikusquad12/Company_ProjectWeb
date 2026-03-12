@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVI Infratech</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/homeStyle.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo">NV Infratech</a>
+
+    <div class="nav-links" id="navLinks">
+        <a href="/">Home</a>
+        <a href="/aboutus">About</a>
+        <a href="/contactus">Contact Us</a>
+        <a href="/new-user">Register</a>
+        <a href="/admin/users">Admin</a>
+        <a href="/user-login">Login</a>
+    </div>
+
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="content">
+
+        <img src="/img/logo1.png" alt="NVI Infratech Logo" class="logo">
+
+        <!-- <div class="slogan-div">
+            <p class="slogan">आज का निवेश, कल की तैयारी। <br> आपका विश्वास, हमारी जिम्मेदारी।</p>
+        </div> -->
+        
+
+        <div class="tagline">
+            BUILDING DREAMS, SHAPING THE FUTURE.
+        </div>
+
+        <div class="contact">
+            www.nvinfratech.com 
+            <span> | </span> 
+            info@nvinfratech.com
+        </div>
+
+        <div class="phone">
+            📞 +91 99348 20237
+        </div>
+
+    </div>
+
+</section>
+
+
+    <!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-container">
+
+        <div class="footer-column">
+            <h3>North Vihar Infratech Pvt. Ltd.</h3>
+            <p><strong>Head Ofc:</strong><br>
+            Ward 06, Gannipur Bejha,<br>
+            Near Bank of India<br>
+            Sakra, Muzaffarpur<br>
+            Bihar - 843105</p>
+
+            <p>
+            📞 +91 - 9934 820 237<br>
+            📞 +91 - 950 796 6718<br>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="16" style="vertical-align:middle;"> +91  - 700 404 6770<br>
+            ✉ info@nvinfratech.com
+            </p>
+        </div>
+
+        <div class="footer-column">
+            <h3>Useful Links</h3>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/aboutus">About</a></li>
+                <li><a href="#">Green City</a></li>
+                <li><a href="/office-location">Office Location</a></li>
+                <li><a href="/new-user">Register/Login</a></li>
+                <li><a href="/contactus">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>About North Vihar Infratech Pvt. Ltd.</h3>
+            <p>
+                We also endeavor to make the world beautiful place to dwell in by fulfilling our customer's demand. 
+                As a real Estate company, we have been redefining the standards of real Estate with our years of experience, 
+                by offering a wide range of services. Our experts is also to grow assets and manage your diversified Portfolio.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 North Vihar Infratech Pvt. Ltd. All Rights Reserved.
+    </div>
+</footer>
+
+
+<script>
+
+/* Hamburger Toggle */
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+
+hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+});
+
+/* Change Navbar on Scroll */
+window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Shital Buildtech</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/loginStyle.css">
+
+</head>
+<body>
+
+<div class="login-card">
+
+    <!-- Your Logo -->
+    <img src="img/logo1.png" alt="Company Logo" class="logo">
+
+    <h2>Login</h2>
+
+    <div class="divider"></div>
+
+    <% if (typeof error !== 'undefined') { %>
+        <div class="error-message"><%= error %></div>
+    <% } %>
+    <form method="post" action="/user-login-check">
+        <input type="text" placeholder="Enter User Name" name="username" class="input-box" required>
+        <input type="password" placeholder="Enter Password" name="password" class="input-box" required>
+
+        <div class="remember">
+            <input type="checkbox" id="remember" required>
+            <label for="remember">Remember Me</label>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <div class="divider" style="margin-top:25px;"></div>
+
+    <div class="forgot">
+        <a href="#">Forgot Password?</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    © 2026 North Vihar Infratech Pvt Ltd
+</div>
+
+</body>
+</html>
